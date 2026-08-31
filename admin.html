@@ -61,8 +61,12 @@ body{
 <div class="wrap">
   <div class="hdr">
     <div class="sub">Żabkowe Mistrzostwa w Triki</div>
-    <h1>Wpisywanie wyników</h1>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <h1>Wpisywanie wyników</h1>
+      <button id="reportBtn" style="flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#f5f3ff;border-radius:10px;padding:9px 16px;font-family:'Nunito';font-weight:800;font-size:.85rem;cursor:pointer">📄 Pobierz raport (CSV)</button>
+    </div>
   </div>
+  <div id="reportMsg" style="font-size:.78rem;color:#8a86ad;margin:-10px 0 16px;min-height:14px"></div>
 
   <div class="tabs" id="tabs"></div>
 
@@ -84,7 +88,7 @@ const LOGOS = {
   bokser:   'https://triki.zabka.pl/images/game-image-Boxer.png',
   toss:     'https://triki.zabka.pl/images/game-image-Toss.png',
   snake:    'https://triki.zabka.pl/images/game-image-Snake.png',
-  snake1v1: 'https://triki.zabka.pl/images/game-image-Ninja%20Frog.png',
+  snake1v1: 'https://triki.zabka.pl/images/game-image-Snake_1vs1.png',
   pilka:    'https://triki.zabka.pl/images/game-image-Pilka-nozna.png',
   galaxy:   ''
 };
@@ -111,11 +115,6 @@ const GAMES = [
   {key:'pilka',    label:'Piłka Nożna',  c:'#f97316'},
   {key:'galaxy',   label:'Galaxy',       c:'#3b82f6'}
 ];
-const ROUNDS = {
-  snake: ['16:30','19:30','22:30','01:30'],
-  pilka: ['17:30','18:30','20:30','21:30','23:30','00:30']
-};
-
 let current = 'ninja';
 
 function renderTabs(){
@@ -145,16 +144,12 @@ function renderForm(){
       <button class="submit" style="--c:${g.c}" id="submitBtn">Dodaj mecz</button>
       <div class="msg" id="msg"></div>`;
   }else{
-    const hasRounds = !!ROUNDS[current];
     panel.innerHTML = `
       <h2 style="color:${g.c}"><span class="icon-badge" style="--c:${g.c}">${iconHtml(current)}</span>Dodaj wynik — ${g.label}</h2>
       <div class="field"><label>Nick gracza</label><input id="f-name" placeholder="np. ShadowFox"></div>
       <div class="row2">
         <div class="field"><label>Wynik</label><input id="f-score" type="number" placeholder="np. 1250"></div>
-        ${hasRounds
-          ? `<div class="field"><label>Tura</label><select id="f-round">${ROUNDS[current].map(r=>`<option value="${r}">${r}</option>`).join('')}</select></div>`
-          : `<div class="field"><label>Nr jury (opcjonalnie)</label><input id="f-jury" type="number" placeholder="np. 2"></div>`
-        }
+        <div class="field"><label>Nr jury (opcjonalnie)</label><input id="f-jury" type="number" placeholder="np. 2"></div>
       </div>
       <button class="submit" style="--c:${g.c}" id="submitBtn">Dodaj wynik</button>
       <div class="msg" id="msg"></div>`;
@@ -182,7 +177,6 @@ async function submitEntry(){
       msg.textContent='Podaj nick i poprawny wynik.'; msg.className='msg err'; return;
     }
     payload = { name, score };
-    if(ROUNDS[current]) payload.round = document.getElementById('f-round').value;
     const juryEl = document.getElementById('f-jury');
     if(juryEl && juryEl.value) payload.jury = Number(juryEl.value);
   }
@@ -248,6 +242,66 @@ async function deleteEntry(id){
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+async function downloadReport(){
+  const btn = document.getElementById('reportBtn');
+  const rmsg = document.getElementById('reportMsg');
+  btn.disabled = true; btn.textContent = '📄 Zbieram dane…';
+  rmsg.textContent = '';
+
+  try{
+    const rows = [['Gra','Miejsce','Nick / Zwycięzca','Przegrany','Wynik','Tura','Jury']];
+
+    for(const g of GAMES){
+      const res = await fetch(`${DB}/${g.key}.json?_ts=${Date.now()}`, {cache:'no-store'});
+      const val = await res.json();
+      if(!val) continue;
+      const items = Object.values(val);
+
+      if(g.key === 'snake1v1'){
+        items.sort((a,b)=> (b.ts||0)-(a.ts||0));
+        items.forEach(e=>{
+          rows.push([g.label, '', e.winner||'', e.loser||'', '', '', '']);
+        });
+      }else{
+        items.sort((a,b)=> (b.score||0)-(a.score||0));
+        items.forEach((e,i)=>{
+          rows.push([g.label, i+1, e.name||'', '', e.score ?? '', e.round||'', e.jury ?? '']);
+        });
+      }
+    }
+
+    if(rows.length === 1){
+      rmsg.textContent = 'Brak jakichkolwiek wyników do wyeksportowania.';
+      btn.disabled = false; btn.textContent = '📄 Pobierz raport (CSV)';
+      return;
+    }
+
+    const csv = '\uFEFF' + rows.map(r =>
+      r.map(v => {
+        const s = String(v ?? '');
+        return /[;"\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+      }).join(';')
+    ).join('\r\n');
+
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,16).replace('T','_').replace(':','-');
+    a.href = url;
+    a.download = `raport-triki-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    rmsg.textContent = 'Pobrano raport ✓';
+  }catch(e){
+    rmsg.textContent = 'Nie udało się wygenerować raportu — sprawdź połączenie.';
+  }finally{
+    btn.disabled = false; btn.textContent = '📄 Pobierz raport (CSV)';
+  }
+}
+document.getElementById('reportBtn').addEventListener('click', downloadReport);
 
 renderTabs();
 renderForm();
