@@ -24,7 +24,8 @@ body{
     rgba(7,5,15,.74);
 }
 .hdr{position:relative;background:linear-gradient(180deg,rgba(16,11,36,.92),rgba(9,7,22,.82));border-bottom:1px solid rgba(255,255,255,.08);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;backdrop-filter:blur(6px)}
-.hdr-left{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.hdr-left{flex:1;min-width:0;display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.hdr-banner{width:100%;max-height:60px;object-fit:contain;object-position:left center;display:block}
 .hdr h1{font-family:'Baloo 2',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:.01em;line-height:1;background-image:linear-gradient(90deg,#f9a8d4,#c084fc,#60a5fa,#67e8f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .hdr .sub{font-size:.62rem;color:#8a86ad;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:2px}
 .live{position:relative;z-index:1;display:flex;align-items:center;gap:7px;background:rgba(239,68,68,.13);border:1px solid #ef4444;border-radius:20px;padding:5px 14px;font-size:.75rem;font-weight:800;color:#ff8484;letter-spacing:.12em;box-shadow:0 0 16px rgba(239,68,68,.25)}
@@ -109,8 +110,8 @@ body{
 <div id="bg-plansza"></div>
 <div id="bg-overlay"></div>
 <div class="hdr">
-  <div class="hdr-left">
-    <div><div class="sub">Żabkowe Mistrzostwa w</div><h1>TRiKi</h1></div>
+  <div class="hdr-left" id="hdrLeft">
+    <div id="hdrText"><div class="sub">Żabkowe Mistrzostwa w</div><h1>TRiKi</h1></div>
   </div>
   <div class="live"><div class="dot"></div>LIVE</div>
 </div>
@@ -171,6 +172,10 @@ const BG_IMAGE = '';
 const EVENT_LOGO = '';
 // np. const EVENT_LOGO = 'https://i.imgur.com/logo-triki.png';
 
+/* Baner na całą szerokość nagłówka, zastępuje napis "Żabkowe Mistrzostwa w TRiKi".
+   Zostaw '' żeby wrócić do napisu. */
+const HEADER_BANNER = 'https://chatgpt.com/backend-api/estuary/content?id=file_00000000d1a081f68809b7833ee0957a&ts=496716&p=fs&cid=1&sig=95d5ff853332381e9c59fd55752c98374563d75e15f79a1b6a86869245221d0b&v=0';
+
 /* 3) LOGA POSZCZEGÓLNYCH GIER
       Dla każdej gry wklej link do SWOJEGO loga. Jeśli zostawisz '', strona
       sama pokaże domyślną ikonkę, którą dla Ciebie zaprojektowałem (w stylu
@@ -216,7 +221,9 @@ function paintBackground(){
   if(BG_IMAGE){
     document.getElementById('bg-plansza').style.backgroundImage = `url('${BG_IMAGE}')`;
   }
-  if(EVENT_LOGO){
+  if(HEADER_BANNER){
+    document.getElementById('hdrText').outerHTML = `<img class="hdr-banner" src="${HEADER_BANNER}" alt="Żabkowe Mistrzostwa w Triki">`;
+  }else if(EVENT_LOGO){
     const img = document.createElement('img');
     img.id = 'event-logo'; img.src = EVENT_LOGO; img.alt = '';
     document.querySelector('.hdr-left').prepend(img);
