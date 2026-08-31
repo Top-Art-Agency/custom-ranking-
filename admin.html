@@ -55,6 +55,13 @@ body{
 .entry .del:hover{color:#ff5d7a}
 .empty2{color:#5a5a7d;font-size:.85rem;text-align:center;padding:16px}
 .loading{color:#5a5a7d;font-size:.8rem;text-align:center;padding:10px}
+.dangerZone{margin-top:36px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.dangerZone button{
+  background:none;border:1px solid rgba(255,93,122,.25);color:#6d5a63;
+  font-family:'Nunito';font-size:.75rem;font-weight:700;letter-spacing:.02em;
+  padding:7px 14px;border-radius:8px;cursor:pointer;opacity:.7;
+}
+.dangerZone button:hover{opacity:1;color:#ff5d7a;border-color:#ff5d7a}
 </style>
 </head>
 <body>
@@ -75,6 +82,10 @@ body{
   <div class="list">
     <h2 id="listTitle">Aktualne wyniki</h2>
     <div id="listBody"><div class="loading">Ładowanie…</div></div>
+  </div>
+
+  <div class="dangerZone">
+    <button id="clearBtn">🗑 Wyczyść wszystkie wyniki tej gry</button>
   </div>
 </div>
 
@@ -127,6 +138,9 @@ function renderTabs(){
   tabs.querySelectorAll('.tab').forEach(btn=>{
     btn.addEventListener('click', ()=>{ current = btn.dataset.key; renderTabs(); renderForm(); loadList(); });
   });
+  const g = GAMES.find(x=>x.key===current);
+  const clearBtn = document.getElementById('clearBtn');
+  if(clearBtn) clearBtn.textContent = `🗑 Wyczyść wszystkie wyniki — ${g.label}`;
 }
 
 function renderForm(){
@@ -333,6 +347,27 @@ async function downloadReport(){
     btn.disabled = false; btn.textContent = '📄 Pobierz raport (CSV)';
   }
 }
+async function clearGameResults(){
+  const g = GAMES.find(x=>x.key===current);
+
+  if(!confirm(`Na pewno usunąć WSZYSTKIE wyniki dla gry „${g.label}”?\n\nTej operacji nie można cofnąć.`)) return;
+
+  const typed = prompt(`Żeby potwierdzić, wpisz dokładnie: ${g.label}`);
+  if(typed === null) return;
+  if(typed.trim().toLowerCase() !== g.label.trim().toLowerCase()){
+    alert('Nazwa się nie zgadza — nic nie usunięto.');
+    return;
+  }
+
+  try{
+    await fetch(`${DB}/${current}.json`, { method:'DELETE' });
+    loadList();
+  }catch(e){
+    alert('Nie udało się wyczyścić wyników — sprawdź połączenie.');
+  }
+}
+document.getElementById('clearBtn').addEventListener('click', clearGameResults);
+
 document.getElementById('reportBtn').addEventListener('click', downloadReport);
 
 renderTabs();
