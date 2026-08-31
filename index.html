@@ -2,180 +2,87 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8"/>
-<title>Żabkowe Mistrzostwa w Triki — TV</title>
+<title>Żabkowe Mistrzostwa w Triki — Wpisywanie wyników</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Orbitron:wght@700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-  background:#07050f;
-  color:#f5f3ff;font-family:'Nunito',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;
-}
-/* ====== PLANSZA / TŁO ======
-   #bg-plansza pokazuje Twój obrazek tła (jeśli go podepniesz w konfiguracji na dole pliku).
-   #bg-overlay to te same neonowe poświaty co wcześniej, teraz jako warstwa NAD obrazkiem,
-   żeby tło się nie zlewało z treścią i tekst zostawał czytelny. */
-#bg-plansza{position:fixed;inset:0;z-index:-3;background-size:cover;background-position:center;background-repeat:no-repeat;}
-#bg-overlay{
-  position:fixed;inset:0;z-index:-2;
   background:
-    radial-gradient(ellipse 900px 520px at 12% -8%, rgba(236,72,153,.22), transparent 60%),
-    radial-gradient(ellipse 950px 620px at 102% 8%, rgba(59,130,246,.20), transparent 60%),
-    radial-gradient(ellipse 800px 520px at 50% 118%, rgba(168,85,247,.16), transparent 60%),
-    rgba(7,5,15,.74);
+    radial-gradient(ellipse 900px 520px at 12% -8%, rgba(236,72,153,.18), transparent 60%),
+    radial-gradient(ellipse 950px 620px at 102% 8%, rgba(59,130,246,.16), transparent 60%),
+    #07050f;
+  color:#f5f3ff;font-family:'Nunito',sans-serif;min-height:100vh;padding:20px 16px 60px;
 }
-.hdr{position:relative;background:linear-gradient(180deg,rgba(16,11,36,.92),rgba(9,7,22,.82));border-bottom:1px solid rgba(255,255,255,.08);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;backdrop-filter:blur(6px)}
-.hdr-left{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
-.hdr h1{font-family:'Baloo 2',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:.01em;line-height:1;background-image:linear-gradient(90deg,#f9a8d4,#c084fc,#60a5fa,#67e8f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.hdr .sub{font-size:.62rem;color:#8a86ad;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:2px}
-.live{position:relative;z-index:1;display:flex;align-items:center;gap:7px;background:rgba(239,68,68,.13);border:1px solid #ef4444;border-radius:20px;padding:5px 14px;font-size:.75rem;font-weight:800;color:#ff8484;letter-spacing:.12em;box-shadow:0 0 16px rgba(239,68,68,.25)}
-.dot{width:8px;height:8px;background:#ef4444;border-radius:50%;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.nav{display:flex;gap:6px;background:rgba(10,8,22,.65);border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;overflow-x:auto;padding:9px 26px}
-.nb{display:flex;align-items:center;gap:8px;padding:9px 20px;font-size:1.02rem;font-weight:800;cursor:pointer;background:rgba(255,255,255,.03);color:#82829f;border:1px solid rgba(255,255,255,.07);border-radius:999px;font-family:'Nunito',sans-serif;letter-spacing:.02em;transition:all .2s;white-space:nowrap}
-.nb.active{color:#fff;border-color:var(--c);background:rgba(255,255,255,.06);box-shadow:0 0 3px var(--c),0 0 20px var(--c),inset 0 0 10px var(--c)}
-.view{flex:1;display:none;flex-direction:column;overflow:hidden}
-.view.active{display:flex}
-.all-grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}
-.ac{display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.06);overflow:hidden}
-.ac:last-child{border-right:none}
-.ac-hdr{padding:14px 16px 12px;border-bottom:2px solid var(--c);font-family:'Baloo 2',sans-serif;font-size:1.02rem;font-weight:700;color:var(--c);flex-shrink:0;text-shadow:0 0 14px currentColor;display:flex;align-items:center;gap:8px}
-.ac-hdr span:not(.icon-badge){font-family:'Orbitron',sans-serif;font-size:.65rem;color:#7d7d9c;text-shadow:none;font-weight:700;margin-left:auto}
-.ac-list{flex:1;overflow-y:auto;padding:6px 0;display:flex;flex-direction:column;gap:3px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
-.ar{display:flex;align-items:center;gap:9px;padding:8px 14px;margin:0 6px;border-radius:9px}
-.ar1{background:linear-gradient(90deg,rgba(255,255,255,.09),transparent);border:1px solid rgba(255,255,255,.13)}
-.ar2{background:linear-gradient(90deg,rgba(255,255,255,.05),transparent);border:1px solid rgba(255,255,255,.08)}
-.ar3{background:linear-gradient(90deg,rgba(255,255,255,.03),transparent);border:1px solid rgba(255,255,255,.05)}
-.am,.ap{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:900;color:#6d6d8f;width:22px;text-align:center;flex-shrink:0}
-.ar1 .ap{color:#fff;text-shadow:0 0 10px rgba(255,255,255,.55)}
-.an{font-size:.86rem;font-weight:800;color:#e7e5f7;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
-.as{font-family:'Orbitron',sans-serif;font-size:.92rem;font-weight:900;color:var(--c);flex-shrink:0;text-shadow:0 0 10px currentColor}
-.g-hdr{padding:22px 40px 12px;display:flex;align-items:baseline;gap:16px;flex-shrink:0}
-.g-title{font-family:'Baloo 2',sans-serif;font-size:2.1rem;font-weight:800;text-shadow:0 0 22px currentColor;display:inline-flex;align-items:center;gap:14px}
-.g-cnt{font-size:.85rem;color:#7d7d9c;font-weight:700}
-.g-list{flex:1;overflow-y:auto;padding:0 40px 20px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
-.sched-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,1fr);gap:18px;padding:10px 40px 30px;overflow:hidden}
-.sched-slot{border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px solid}
-.sched-time{font-family:'Orbitron',sans-serif;font-size:2.1rem;font-weight:900;color:#fff;text-shadow:0 0 14px rgba(255,255,255,.4)}
-.sched-game{font-family:'Baloo 2',sans-serif;font-size:1.15rem;font-weight:700;display:flex;align-items:center;gap:8px}
-.sched-slot.sched-snake{background:linear-gradient(160deg,rgba(16,185,129,.22),rgba(16,185,129,.05));border-color:rgba(16,185,129,.5)}
-.sched-slot.sched-snake .sched-game{color:#34d399;text-shadow:0 0 10px rgba(16,185,129,.5)}
-.sched-slot.sched-pilka{background:linear-gradient(160deg,rgba(249,115,22,.22),rgba(249,115,22,.05));border-color:rgba(249,115,22,.5)}
-.sched-slot.sched-pilka .sched-game{color:#fb923c;text-shadow:0 0 10px rgba(249,115,22,.5)}
-.en{display:flex;align-items:center;gap:16px;padding:13px 20px;border-radius:12px;margin-bottom:7px}
-.en1{background:linear-gradient(90deg,rgba(255,255,255,.10),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.16)}
-.round-header{font-family:'Baloo 2',sans-serif;font-size:.85rem;font-weight:700;color:#8a86ad;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
-.round-header:first-child{margin-top:0}
-.ar-round{font-family:'Baloo 2',sans-serif;font-size:.68rem;font-weight:700;color:#7d7d9c;letter-spacing:.08em;text-transform:uppercase;margin:10px 6px 3px;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,.06)}
-.ar-round:first-child{margin-top:6px}
-.en2{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.10)}
-.en3{background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.008));border:1px solid rgba(255,255,255,.07)}
-.enn{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05)}
-.em,.ep{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;color:#6d6d8f;width:38px;text-align:center;flex-shrink:0}
-.en1 .ep{color:#fff;font-size:1.3rem;text-shadow:0 0 14px rgba(255,255,255,.6)}
-.en2 .ep{color:#e5e3f5;text-shadow:0 0 10px rgba(255,255,255,.3)}
-.ename{font-size:1.2rem;font-weight:800;flex:1;color:#f5f3ff}
-.escore{font-family:'Orbitron',sans-serif;font-size:1.55rem;font-weight:900;flex-shrink:0;text-shadow:0 0 14px currentColor}
-.ezap{font-size:.7rem;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);border-radius:20px;padding:2px 8px;color:#4ade80;font-weight:800;margin-left:8px;box-shadow:0 0 10px rgba(34,197,94,.25)}
-.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#2c2c46;gap:12px}
-.empty .ico{font-size:4rem;opacity:.5}
-.s1v1{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:0 40px 20px;overflow:hidden}
-.s1v1-col{display:flex;flex-direction:column;overflow:hidden}
-.s1v1-col h3{font-family:'Baloo 2',sans-serif;font-size:.8rem;color:#8a86ad;letter-spacing:.12em;margin-bottom:12px;flex-shrink:0}
-.s1v1-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
-.mc{display:flex;align-items:center;border-radius:10px;overflow:hidden;border:1px solid rgba(139,92,246,.25);flex-shrink:0}
-.mw{background:linear-gradient(90deg,rgba(139,92,246,.28),rgba(139,92,246,.06));padding:10px 16px;font-size:1rem;font-weight:800;color:#d8b4fe;flex:1;text-shadow:0 0 10px rgba(139,92,246,.4)}
-.mvs{background:#0a0818;padding:10px;font-size:.7rem;color:#4d4d6e;font-weight:700}
-.ml{background:rgba(255,255,255,.02);padding:10px 16px;font-size:1rem;font-weight:700;color:#5a5a7d;flex:1;text-align:right}
-.ftr{position:relative;background:rgba(8,6,18,.9);border-top:1px solid rgba(255,255,255,.06);padding:7px 32px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;overflow:hidden}
-.ftr span{position:relative;z-index:1;font-size:.65rem;color:#45455f;letter-spacing:.08em}
+.wrap{max-width:640px;margin:0 auto}
+.hdr{margin-bottom:20px}
+.hdr .sub{font-size:.65rem;color:#8a86ad;letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+.hdr h1{font-family:'Baloo 2',sans-serif;font-size:1.7rem;font-weight:800;margin-top:2px;
+  background-image:linear-gradient(90deg,#f9a8d4,#c084fc,#60a5fa,#67e8f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 
-/* ====== ODZNAKI Z LOGO GIER ======
-   Kółko z obrazkiem (Twoim) albo domyślną ikonką SVG. Kolor obwódki/poświaty
-   bierze się z --c ustawionego na tym samym elemencie (tak jak reszta strony). */
-.icon-badge{
-  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
-  border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--c);
-  box-shadow:0 0 8px var(--c);color:var(--c);vertical-align:middle;overflow:hidden;
-}
-.icon-badge svg{width:58%;height:58%;filter:drop-shadow(0 0 3px currentColor)}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.tab{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#a3a3c2;font-weight:800;font-size:.85rem;cursor:pointer}
+.tab.active{color:#fff;border-color:var(--c);background:rgba(255,255,255,.07);box-shadow:0 0 3px var(--c),0 0 16px var(--c)}
+.icon-badge{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--c);box-shadow:0 0 6px var(--c);color:var(--c);overflow:hidden;width:20px;height:20px}
+.icon-badge svg{width:58%;height:58%;filter:drop-shadow(0 0 2px currentColor)}
 .icon-badge img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.icon-badge.sm{width:24px;height:24px}
-.icon-badge.md{width:30px;height:30px}
-.icon-badge.lg{width:48px;height:48px}
-#event-logo{height:44px;width:44px;object-fit:contain;border-radius:12px;box-shadow:0 0 14px rgba(255,255,255,.25);flex-shrink:0}
+
+.panel{background:#12102a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px;margin-bottom:20px}
+.panel h2{font-family:'Baloo 2',sans-serif;font-size:1.05rem;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.field{margin-bottom:12px}
+.field label{font-size:.72rem;color:#8a86ad;letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+.field input,.field select{
+  width:100%;margin-top:5px;background:#0b0a1c;border:1px solid rgba(255,255,255,.1);
+  border-radius:9px;padding:11px 12px;color:#f5f3ff;font-family:'Nunito';font-size:16px;font-weight:700;outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--c)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:.8rem;margin-top:8px;min-height:16px;font-weight:700}
+.msg.ok{color:#4ade80}
+.msg.err{color:#ff8484}
+.submit{
+  width:100%;margin-top:6px;padding:13px;border:none;border-radius:10px;cursor:pointer;
+  font-family:'Orbitron';font-weight:800;font-size:.85rem;letter-spacing:.03em;
+  background:linear-gradient(90deg,var(--c),#fff2);color:#0b0a1c;background-color:var(--c);
+}
+.submit:active{transform:scale(.98)}
+
+.list h2{font-family:'Baloo 2',sans-serif;font-size:.95rem;color:#8a86ad;margin-bottom:10px}
+.entry{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 13px;margin-bottom:7px}
+.entry .nm{flex:1;font-weight:800;font-size:.95rem}
+.entry .rd{font-size:.68rem;color:#7d7d9c;background:rgba(255,255,255,.05);border-radius:8px;padding:2px 7px;margin-left:6px}
+.entry .sc{font-family:'Orbitron';font-weight:900;color:var(--c);font-size:1rem}
+.entry .del{background:none;border:none;color:#6d6d8f;font-size:1rem;cursor:pointer;padding:2px 7px}
+.entry .del:hover{color:#ff5d7a}
+.empty2{color:#5a5a7d;font-size:.85rem;text-align:center;padding:16px}
+.loading{color:#5a5a7d;font-size:.8rem;text-align:center;padding:10px}
 </style>
 </head>
 <body>
-<div id="bg-plansza"></div>
-<div id="bg-overlay"></div>
-<div class="hdr">
-  <div class="hdr-left">
-    <div><div class="sub">Żabkowe Mistrzostwa w</div><h1>TRiKi</h1></div>
+<div class="wrap">
+  <div class="hdr">
+    <div class="sub">Żabkowe Mistrzostwa w Triki</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <h1>Wpisywanie wyników</h1>
+      <button id="reportBtn" style="flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#f5f3ff;border-radius:10px;padding:9px 16px;font-family:'Nunito';font-weight:800;font-size:.85rem;cursor:pointer">📄 Pobierz raport (CSV)</button>
+    </div>
   </div>
-  <div class="live"><div class="dot"></div>LIVE</div>
-</div>
-<div class="nav">
-  <button class="nb active" style="--c:#f472b6" onclick="showAll(this)"><span class="icon-badge sm" data-icon="all" style="--c:#f472b6"></span>Wszystkie</button>
-  <button class="nb" style="--c:#22c55e" onclick="show('ninja',this)"><span class="icon-badge sm" data-icon="ninja" style="--c:#22c55e"></span>Ninja Frog</button>
-  <button class="nb" style="--c:#ef4444" onclick="show('bokser',this)"><span class="icon-badge sm" data-icon="bokser" style="--c:#ef4444"></span>Bokser</button>
-  <button class="nb" style="--c:#f59e0b" onclick="show('toss',this)"><span class="icon-badge sm" data-icon="toss" style="--c:#f59e0b"></span>Toss</button>
-  <button class="nb" style="--c:#10b981" onclick="show('snake',this)"><span class="icon-badge sm" data-icon="snake" style="--c:#10b981"></span>Snake</button>
-  <button class="nb" style="--c:#8b5cf6" onclick="show('snake1v1',this)"><span class="icon-badge sm" data-icon="snake1v1" style="--c:#8b5cf6"></span>Snake 1v1</button>
-  <button class="nb" style="--c:#f97316" onclick="show('pilka',this)"><span class="icon-badge sm" data-icon="pilka" style="--c:#f97316"></span>Piłka Nożna</button>
-  <button class="nb" style="--c:#3b82f6" onclick="show('galaxy',this)"><span class="icon-badge sm" data-icon="galaxy" style="--c:#3b82f6"></span>Galaxy</button>
-</div>
+  <div id="reportMsg" style="font-size:.78rem;color:#8a86ad;margin:-10px 0 16px;min-height:14px"></div>
 
-<div class="view active" id="view-all">
-  <div class="all-grid">
-    <div class="ac" style="--c:#22c55e" data-game="ninja"><div class="ac-hdr"><span class="icon-badge md" data-icon="ninja" style="--c:#22c55e"></span>Ninja Frog <span id="ac-ninja"></span></div><div class="ac-list" id="al-ninja"></div></div>
-    <div class="ac" style="--c:#ef4444" data-game="bokser"><div class="ac-hdr"><span class="icon-badge md" data-icon="bokser" style="--c:#ef4444"></span>Bokser <span id="ac-bokser"></span></div><div class="ac-list" id="al-bokser"></div></div>
-    <div class="ac" style="--c:#f59e0b" data-game="toss"><div class="ac-hdr"><span class="icon-badge md" data-icon="toss" style="--c:#f59e0b"></span>Toss <span id="ac-toss"></span></div><div class="ac-list" id="al-toss"></div></div>
-    <div class="ac" style="--c:#10b981" data-game="snake"><div class="ac-hdr"><span class="icon-badge md" data-icon="snake" style="--c:#10b981"></span>Snake <span id="ac-snake"></span></div><div class="ac-list" id="al-snake"></div></div>
-    <div class="ac" style="--c:#8b5cf6" data-game="snake1v1"><div class="ac-hdr"><span class="icon-badge md" data-icon="snake1v1" style="--c:#8b5cf6"></span>Snake 1v1 <span id="ac-snake1v1"></span></div><div class="ac-list" id="al-snake1v1"></div></div>
-    <div class="ac" style="--c:#f97316" data-game="pilka"><div class="ac-hdr"><span class="icon-badge md" data-icon="pilka" style="--c:#f97316"></span>Piłka Nożna <span id="ac-pilka"></span></div><div class="ac-list" id="al-pilka"></div></div>
-    <div class="ac" style="--c:#3b82f6" data-game="galaxy"><div class="ac-hdr"><span class="icon-badge md" data-icon="galaxy" style="--c:#3b82f6"></span>Galaxy <span id="ac-galaxy"></span></div><div class="ac-list" id="al-galaxy"></div></div>
+  <div class="tabs" id="tabs"></div>
+
+  <div class="panel" id="formPanel"></div>
+
+  <div class="list">
+    <h2 id="listTitle">Aktualne wyniki</h2>
+    <div id="listBody"><div class="loading">Ładowanie…</div></div>
   </div>
 </div>
-
-<div class="view" id="view-ninja"><div class="g-hdr"><span class="g-title" style="color:#22c55e"><span class="icon-badge lg" data-icon="ninja" style="--c:#22c55e"></span>Ninja Frog</span><span class="g-cnt" id="gc-ninja"></span></div><div class="g-list" id="gl-ninja"></div></div>
-<div class="view" id="view-bokser"><div class="g-hdr"><span class="g-title" style="color:#ef4444"><span class="icon-badge lg" data-icon="bokser" style="--c:#ef4444"></span>Bokser</span><span class="g-cnt" id="gc-bokser"></span></div><div class="g-list" id="gl-bokser"></div></div>
-<div class="view" id="view-toss"><div class="g-hdr"><span class="g-title" style="color:#f59e0b"><span class="icon-badge lg" data-icon="toss" style="--c:#f59e0b"></span>Toss</span><span class="g-cnt" id="gc-toss"></span></div><div class="g-list" id="gl-toss"></div></div>
-<div class="view" id="view-snake"><div class="g-hdr"><span class="g-title" style="color:#10b981"><span class="icon-badge lg" data-icon="snake" style="--c:#10b981"></span>Snake</span><span class="g-cnt" id="gc-snake"></span></div><div class="g-list" id="gl-snake"></div></div>
-<div class="view" id="view-snake1v1">
-  <div class="g-hdr"><span class="g-title" style="color:#8b5cf6"><span class="icon-badge lg" data-icon="snake1v1" style="--c:#8b5cf6"></span>Snake 1v1</span><span class="g-cnt" id="gc-snake1v1"></span></div>
-  <div class="s1v1">
-    <div class="s1v1-col"><h3>KLASYFIKACJA GENERALNA</h3><div class="s1v1-list" id="gl-snake1v1"></div></div>
-    <div class="s1v1-col"><h3>OSTATNIE MECZE</h3><div class="s1v1-list" id="gl-snake1v1-m"></div></div>
-  </div>
-</div>
-<div class="view" id="view-pilka"><div class="g-hdr"><span class="g-title" style="color:#f97316"><span class="icon-badge lg" data-icon="pilka" style="--c:#f97316"></span>Piłka Nożna</span><span class="g-cnt" id="gc-pilka"></span></div><div class="g-list" id="gl-pilka"></div></div>
-<div class="view" id="view-galaxy"><div class="g-hdr"><span class="g-title" style="color:#3b82f6"><span class="icon-badge lg" data-icon="galaxy" style="--c:#3b82f6"></span>Galaxy</span><span class="g-cnt" id="gc-galaxy"></span></div><div class="g-list" id="gl-galaxy"></div></div>
-
-<div class="ftr"><span>LIVE — aktualizuje się automatycznie</span><span>top-art-agency.github.io/Ranking-Triki/</span></div>
 
 <script>
-/* ============================================================================
-   🎨 GRAFIKI — TU PODMIENIASZ SWOJE PLIKI
-   ============================================================================
-   1) PLANSZA / TŁO CAŁEJ STRONY
-      Wklej link do obrazka między cudzysłowy. Zostaw '' żeby zostało samo
-      neonowe tło jak wcześniej (bez zdjęcia).
-      Obrazek najlepiej w proporcji zbliżonej do ekranu TV (16:9), min. 1920px
-      szerokości, żeby nie było rozmyte na dużym telewizorze.
-   ------------------------------------------------------------------------- */
-const BG_IMAGE = '';
-// np. const BG_IMAGE = 'https://i.imgur.com/twoja-plansza.jpg';
+/* Ta sama baza co w tablicy TV — zmieniaj tu i tam razem, jeśli kiedyś się zmieni. */
+const DB = 'https://triki-ranking-2-default-rtdb.europe-west1.firebasedatabase.app';
 
-/* 2) OPCJONALNE LOGO CAŁEGO WYDARZENIA (obok napisu "TRiKi" w nagłówku).
-      Zostaw '' żeby nic nie pokazywać. */
-const EVENT_LOGO = '';
-// np. const EVENT_LOGO = 'https://i.imgur.com/logo-triki.png';
-
-/* 3) LOGA POSZCZEGÓLNYCH GIER
-      Dla każdej gry wklej link do SWOJEGO loga. Jeśli zostawisz '', strona
-      sama pokaże domyślną ikonkę, którą dla Ciebie zaprojektowałem (w stylu
-      neonowym pasującym do reszty), więc możesz podmieniać gry pojedynczo —
-      część swoich, część moich, bez ryzyka "dziury" w wyglądzie. */
+/* Te same loga co na tablicy TV — jeśli podmienisz w pliku TV, podmień i tu, żeby wyglądało spójnie. */
 const LOGOS = {
   ninja:    'https://triki.zabka.pl/images/game-image-Ninja%20Frog.png',
   bokser:   'https://triki.zabka.pl/images/game-image-Boxer.png',
@@ -184,15 +91,8 @@ const LOGOS = {
   snake1v1: 'https://triki.zabka.pl/images/game-image-Snake_1vs1.png',
   pilka:    'https://triki.zabka.pl/images/game-image-Pilka-nozna.png',
   galaxy:   ''
-  // np. ninja: 'https://i.imgur.com/ninja-logo.png',
 };
-/* ============================================================================
-   Koniec sekcji do edycji — dalej jest już tylko logika strony.
-   ============================================================================ */
-
 const DEFAULT_ICONS = {
-  all: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
-  schedule: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>`,
   ninja: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c0-3 3-6 8-6s8 3 8 6"/><circle cx="8" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="16" cy="9" r="1.3" fill="currentColor" stroke="none"/><path d="M3 9l3-3M21 9l-3-3"/><path d="M6 13c0 4 3 7 6 7s6-3 6-7"/></svg>`,
   bokser: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V7a3 3 0 0 1 6 0v1"/><path d="M14 8a3 3 0 0 1 6 0v6c0 3-2 6-6 6H9a4 4 0 0 1-4-4v-3c0-1.5 1-2.5 2.5-2.5S10 9.5 10 11"/></svg>`,
   toss: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><path d="M18 6l3-3" stroke-linecap="round"/></svg>`,
@@ -201,168 +101,211 @@ const DEFAULT_ICONS = {
   pilka: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/><path d="M12 7V4M16 10l3-1M15 15l2 3M9 15l-2 3M8 10l-3-1"/></svg>`,
   galaxy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3 2 4 6 4 10l-4 4-4-4c0-4 1-8 4-10z"/><circle cx="12" cy="9" r="1.3" fill="currentColor" stroke="none"/><path d="M8 14l-3 3 1 3 3-1M16 14l3 3-1 3-3-1"/><path d="M10 19l1 3M14 19l-1 3"/></svg>`
 };
+function iconHtml(key){
+  if(LOGOS[key]) return `<img src="${LOGOS[key]}" alt="">`;
+  return DEFAULT_ICONS[key] || '';
+}
 
-function paintIcons(){
-  document.querySelectorAll('.icon-badge[data-icon]').forEach(el=>{
-    const key = el.dataset.icon;
-    if(LOGOS[key]){
-      el.innerHTML = `<img src="${LOGOS[key]}" alt="">`;
-    }else if(DEFAULT_ICONS[key]){
-      el.innerHTML = DEFAULT_ICONS[key];
-    }
+const GAMES = [
+  {key:'ninja',    label:'Ninja Frog',   c:'#22c55e'},
+  {key:'bokser',   label:'Bokser',       c:'#ef4444'},
+  {key:'toss',     label:'Toss',         c:'#f59e0b'},
+  {key:'snake',    label:'Snake',        c:'#10b981'},
+  {key:'snake1v1', label:'Snake 1v1',    c:'#8b5cf6'},
+  {key:'pilka',    label:'Piłka Nożna',  c:'#f97316'},
+  {key:'galaxy',   label:'Galaxy',       c:'#3b82f6'}
+];
+let current = 'ninja';
+
+function renderTabs(){
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = GAMES.map(g=>
+    `<button class="tab ${g.key===current?'active':''}" style="--c:${g.c}" data-key="${g.key}">
+       <span class="icon-badge" style="--c:${g.c}">${iconHtml(g.key)}</span>${g.label}
+     </button>`
+  ).join('');
+  tabs.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ current = btn.dataset.key; renderTabs(); renderForm(); loadList(); });
   });
 }
-function paintBackground(){
-  if(BG_IMAGE){
-    document.getElementById('bg-plansza').style.backgroundImage = `url('${BG_IMAGE}')`;
+
+function renderForm(){
+  const g = GAMES.find(x=>x.key===current);
+  const panel = document.getElementById('formPanel');
+  document.getElementById('listTitle').textContent = 'Aktualne wyniki — ' + g.label;
+
+  if(current === 'snake1v1'){
+    panel.innerHTML = `
+      <h2 style="color:${g.c}"><span class="icon-badge" style="--c:${g.c}">${iconHtml('snake1v1')}</span>Dodaj mecz — Snake 1v1</h2>
+      <div class="row2">
+        <div class="field"><label>Zwycięzca</label><input id="f-winner" placeholder="np. Kasia"></div>
+        <div class="field"><label>Przegrany</label><input id="f-loser" placeholder="np. Tomek"></div>
+      </div>
+      <button class="submit" style="--c:${g.c}" id="submitBtn">Dodaj mecz</button>
+      <div class="msg" id="msg"></div>`;
+  }else{
+    panel.innerHTML = `
+      <h2 style="color:${g.c}"><span class="icon-badge" style="--c:${g.c}">${iconHtml(current)}</span>Dodaj wynik — ${g.label}</h2>
+      <div class="field"><label>Nick gracza</label><input id="f-name" placeholder="np. ShadowFox"></div>
+      <div class="row2">
+        <div class="field"><label>Wynik</label><input id="f-score" type="number" placeholder="np. 1250"></div>
+        <div class="field"><label>Nr jury (opcjonalnie)</label><input id="f-jury" type="number" placeholder="np. 2"></div>
+      </div>
+      <button class="submit" style="--c:${g.c}" id="submitBtn">Dodaj wynik</button>
+      <div class="msg" id="msg"></div>`;
   }
-  if(EVENT_LOGO){
-    const img = document.createElement('img');
-    img.id = 'event-logo'; img.src = EVENT_LOGO; img.alt = '';
-    document.querySelector('.hdr-left').prepend(img);
+
+  document.getElementById('submitBtn').addEventListener('click', submitEntry);
+}
+
+async function submitEntry(){
+  const g = GAMES.find(x=>x.key===current);
+  const msg = document.getElementById('msg');
+  msg.textContent=''; msg.className='msg';
+
+  let payload;
+  if(current === 'snake1v1'){
+    const winner = document.getElementById('f-winner').value.trim();
+    const loser = document.getElementById('f-loser').value.trim();
+    if(!winner || !loser){ msg.textContent='Podaj obu zawodników.'; msg.className='msg err'; return; }
+    if(winner === loser){ msg.textContent='Zwycięzca i przegrany muszą się różnić.'; msg.className='msg err'; return; }
+    payload = { winner, loser };
+  }else{
+    const name = document.getElementById('f-name').value.trim();
+    const score = Number(document.getElementById('f-score').value);
+    if(!name || !document.getElementById('f-score').value || isNaN(score)){
+      msg.textContent='Podaj nick i poprawny wynik.'; msg.className='msg err'; return;
+    }
+    payload = { name, score };
+    const juryEl = document.getElementById('f-jury');
+    if(juryEl && juryEl.value) payload.jury = Number(juryEl.value);
+  }
+
+  try{
+    const res = await fetch(`${DB}/${current}.json`, { method:'POST', body: JSON.stringify(payload) });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    msg.textContent = 'Dodano ✓'; msg.className='msg ok';
+    ['f-name','f-score','f-winner','f-loser'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    loadList();
+  }catch(e){
+    msg.textContent = 'Nie udało się zapisać — sprawdź połączenie lub reguły zapisu w Firebase.'; msg.className='msg err';
   }
 }
-function paintGameBackgrounds(){
-  Object.keys(LOGOS).forEach(key=>{
-    const url = LOGOS[key];
-    if(!url) return;
-    const layer = `linear-gradient(180deg, rgba(7,5,15,.5), rgba(7,5,15,.88)), url('${url}')`;
-    const view = document.getElementById('view-'+key);
-    if(view){
-      view.style.backgroundImage = layer;
-      view.style.backgroundSize = 'cover';
-      view.style.backgroundPosition = 'center';
-    }
-    const card = document.querySelector('.ac[data-game="'+key+'"]');
-    if(card){
-      card.style.backgroundImage = layer;
-      card.style.backgroundSize = 'cover';
-      card.style.backgroundPosition = 'center';
-    }
+
+async function loadList(){
+  const g = GAMES.find(x=>x.key===current);
+  const body = document.getElementById('listBody');
+  body.innerHTML = '<div class="loading">Ładowanie…</div>';
+  let val;
+  try{
+    const res = await fetch(`${DB}/${current}.json?_ts=${Date.now()}`, {cache:'no-store'});
+    val = await res.json();
+  }catch(e){
+    body.innerHTML = '<div class="empty2">Nie udało się pobrać listy.</div>';
+    return;
+  }
+  if(!val){ body.innerHTML = '<div class="empty2">Brak wpisów.</div>'; return; }
+
+  const items = Object.entries(val);
+  if(current === 'snake1v1'){
+    items.sort((a,b)=> (b[1].ts||0)-(a[1].ts||0));
+    body.innerHTML = items.map(([id,e])=>`
+      <div class="entry">
+        <span class="nm">🏆 ${escapeHtml(e.winner||'?')} <span style="color:#6d6d8f;font-weight:600">vs</span> ${escapeHtml(e.loser||'?')}</span>
+        <button class="del" data-id="${id}" title="Usuń">✕</button>
+      </div>`).join('');
+  }else{
+    items.sort((a,b)=> (b[1].score||0)-(a[1].score||0));
+    body.innerHTML = items.map(([id,e])=>`
+      <div class="entry">
+        <span class="nm">${escapeHtml(e.name||'?')}${e.round?`<span class="rd">${e.round}</span>`:''}${e.jury?`<span class="rd">🐸 jury ${e.jury}</span>`:''}</span>
+        <span class="sc" style="--c:${g.c}">${e.score}</span>
+        <button class="del" data-id="${id}" title="Usuń">✕</button>
+      </div>`).join('');
+  }
+
+  body.querySelectorAll('.del').forEach(btn=>{
+    btn.addEventListener('click', ()=> deleteEntry(btn.dataset.id));
   });
 }
-paintIcons();
-paintBackground();
-paintGameBackgrounds();
 
-/* ============================================================
-   ⚠️ NOWA BAZA FIREBASE — WKLEJ TEN SAM URL CO W FORMULARZU
-   ============================================================ */
-const DB='https://triki-ranking-2-default-rtdb.europe-west1.firebasedatabase.app';
-const POLL=5000;
-var H={};
-var ROUNDS={snake:['16:30','19:30','22:30','01:30'],pilka:['17:30','18:30','20:30','21:30','23:30','00:30']};
-
-function show(k,b){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
-  document.getElementById('view-'+k).classList.add('active');
-  b.classList.add('active');
-}
-function showAll(b){show('all',b);}
-
-function med(i){return `<span class="ep">${i+1}</span>`;}
-function amed(i){return `<span class="ap">${i+1}</span>`;}
-
-async function fetchDB(k){try{const r=await fetch(DB+'/'+k+'.json?_ts='+Date.now(),{cache:'no-store'});return await r.json();}catch(e){return null;}}
-
-async function pollGame(k,c){
-  const val=await fetchDB(k);
-  const h=JSON.stringify(val);
-  if(h===H[k])return;
-  H[k]=h;
-  const entries=val?Object.values(val).sort((a,b)=>b.score-a.score):[];
-  const n=entries.length;
-
-  const al=document.getElementById('al-'+k);
-  const ac=document.getElementById('ac-'+k);
-  if(ac)ac.textContent=n?n+' zaw.':'';
-  if(al){
-    if(ROUNDS[k]){
-      let html='';
-      const groups={};
-      entries.forEach(e=>{const r=e.round||'Inne';(groups[r]=groups[r]||[]).push(e);});
-      const order=ROUNDS[k].slice();
-      Object.keys(groups).forEach(r=>{if(!order.includes(r))order.push(r);});
-      order.forEach(r=>{
-        if(!groups[r]||!groups[r].length)return;
-        const g=groups[r].slice().sort((a,b)=>b.score-a.score);
-        html+=`<div class="ar-round">🕐 ${r}</div>`;
-        html+=g.map((e,i)=>`<div class="ar ${i<3?'ar'+(i+1):''}" style="--c:${c}">${amed(i)}<span class="an">${e.name}</span><span class="as">${e.score}</span></div>`).join('');
-      });
-      al.innerHTML=html||'<div style="padding:12px;color:#2c2c46;font-size:.8rem">Brak wyników</div>';
-    }else{
-      al.innerHTML=entries.map((e,i)=>`<div class="ar ${i<3?'ar'+(i+1):''}" style="--c:${c}">${amed(i)}<span class="an">${e.name}</span><span class="as">${e.score}</span></div>`).join('')||'<div style="padding:12px;color:#2c2c46;font-size:.8rem">Brak wyników</div>';
-    }
-  }
-
-  const gl=document.getElementById('gl-'+k);
-  const gc=document.getElementById('gc-'+k);
-  if(gc)gc.textContent=n+' zawodników';
-  if(gl){
-    if(ROUNDS[k]){
-      let html='';
-      const groups={};
-      entries.forEach(e=>{const r=e.round||'Inne';(groups[r]=groups[r]||[]).push(e);});
-      const order=ROUNDS[k].slice();
-      Object.keys(groups).forEach(r=>{if(!order.includes(r))order.push(r);});
-      order.forEach(r=>{
-        if(!groups[r]||!groups[r].length)return;
-        const g=groups[r].slice().sort((a,b)=>b.score-a.score);
-        html+=`<div class="round-header">🕐 ${r}</div>`;
-        html+=g.map((e,i)=>{
-          const cls=i<3?'en'+(i+1):'enn';
-          const z=e.jury?`<span class="ezap">🐸 #${e.jury}</span>`:'';
-          return `<div class="en ${cls}">${med(i)}<span class="ename">${e.name}${z}</span><span class="escore" style="color:${c}">${e.score}</span></div>`;
-        }).join('');
-      });
-      gl.innerHTML=html||'<div class="empty"><div class="ico">🎮</div><p>Brak wyników</p></div>';
-    }else{
-      gl.innerHTML=entries.map((e,i)=>{
-        const cls=i<3?'en'+(i+1):'enn';
-        const z=e.jury?`<span class="ezap">🐸 #${e.jury}</span>`:'';
-        return `<div class="en ${cls}">${med(i)}<span class="ename">${e.name}${z}</span><span class="escore" style="color:${c}">${e.score}</span></div>`;
-      }).join('')||'<div class="empty"><div class="ico">🎮</div><p>Brak wyników</p></div>';
-    }
+async function deleteEntry(id){
+  if(!confirm('Usunąć ten wpis?')) return;
+  try{
+    await fetch(`${DB}/${current}/${id}.json`, { method:'DELETE' });
+    loadList();
+  }catch(e){
+    alert('Nie udało się usunąć wpisu.');
   }
 }
 
-async function poll1v1(){
-  const val=await fetchDB('snake1v1');
-  const h=JSON.stringify(val);
-  if(h===H['s1v1'])return;
-  H['s1v1']=h;
-  const matches=val?Object.values(val).filter(m=>m.winner):[];
-  const wins={};
-  matches.forEach(m=>{wins[m.winner]=(wins[m.winner]||0)+1;});
-  const sorted=Object.entries(wins).sort((a,b)=>b[1]-a[1]);
-
-  const ac=document.getElementById('ac-snake1v1');
-  const gc=document.getElementById('gc-snake1v1');
-  if(ac)ac.textContent=sorted.length+' zaw.';
-  if(gc)gc.textContent=matches.length+' meczów';
-
-  const allHtml=sorted.map(([n,w],i)=>`<div class="ar ${i<3?'ar'+(i+1):''}" style="--c:#8b5cf6">${amed(i)}<span class="an">${n}</span><span class="as">${w}W</span></div>`).join('')||'<div style="padding:12px;color:#2c2c46;font-size:.8rem">Brak meczów</div>';
-  const al=document.getElementById('al-snake1v1');
-  if(al)al.innerHTML=allHtml;
-
-  const gl=document.getElementById('gl-snake1v1');
-  if(gl)gl.innerHTML=sorted.map(([n,w],i)=>`<div class="en ${i<3?'en'+(i+1):'enn'}">${med(i)}<span class="ename">${n}</span><span class="escore" style="color:#8b5cf6">${w}<span style="font-size:.6rem;color:#7d7d9c;font-family:'Nunito',sans-serif"> W</span></span></div>`).join('')||'<div class="empty"><div class="ico">⚔️</div><p>Brak meczów</p></div>';
-
-  const ml=document.getElementById('gl-snake1v1-m');
-  const recent=matches.slice(-10).reverse();
-  if(ml)ml.innerHTML=recent.map(m=>`<div class="mc"><div class="mw">🏆 ${m.winner}</div><div class="mvs">VS</div><div class="ml">${m.loser||'?'}</div></div>`).join('')||'<div class="empty"><div class="ico">🏟️</div><p>Brak meczów</p></div>';
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-const GAMES=[['ninja','#22c55e'],['bokser','#ef4444'],['toss','#f59e0b'],['snake','#10b981'],['pilka','#f97316'],['galaxy','#3b82f6']];
+async function downloadReport(){
+  const btn = document.getElementById('reportBtn');
+  const rmsg = document.getElementById('reportMsg');
+  btn.disabled = true; btn.textContent = '📄 Zbieram dane…';
+  rmsg.textContent = '';
 
-async function pollAll(){
-  await Promise.all(GAMES.map(([k,c])=>pollGame(k,c)));
-  await poll1v1();
+  try{
+    const rows = [['Gra','Miejsce','Nick / Zwycięzca','Przegrany','Wynik','Tura','Jury']];
+
+    for(const g of GAMES){
+      const res = await fetch(`${DB}/${g.key}.json?_ts=${Date.now()}`, {cache:'no-store'});
+      const val = await res.json();
+      if(!val) continue;
+      const items = Object.values(val);
+
+      if(g.key === 'snake1v1'){
+        items.sort((a,b)=> (b.ts||0)-(a.ts||0));
+        items.forEach(e=>{
+          rows.push([g.label, '', e.winner||'', e.loser||'', '', '', '']);
+        });
+      }else{
+        items.sort((a,b)=> (b.score||0)-(a.score||0));
+        items.forEach((e,i)=>{
+          rows.push([g.label, i+1, e.name||'', '', e.score ?? '', e.round||'', e.jury ?? '']);
+        });
+      }
+    }
+
+    if(rows.length === 1){
+      rmsg.textContent = 'Brak jakichkolwiek wyników do wyeksportowania.';
+      btn.disabled = false; btn.textContent = '📄 Pobierz raport (CSV)';
+      return;
+    }
+
+    const csv = '\uFEFF' + rows.map(r =>
+      r.map(v => {
+        const s = String(v ?? '');
+        return /[;"\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+      }).join(';')
+    ).join('\r\n');
+
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,16).replace('T','_').replace(':','-');
+    a.href = url;
+    a.download = `raport-triki-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    rmsg.textContent = 'Pobrano raport ✓';
+  }catch(e){
+    rmsg.textContent = 'Nie udało się wygenerować raportu — sprawdź połączenie.';
+  }finally{
+    btn.disabled = false; btn.textContent = '📄 Pobierz raport (CSV)';
+  }
 }
+document.getElementById('reportBtn').addEventListener('click', downloadReport);
 
-pollAll();
-setInterval(pollAll,POLL);
+renderTabs();
+renderForm();
+loadList();
 </script>
 </body>
 </html>
